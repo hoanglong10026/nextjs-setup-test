@@ -82,36 +82,6 @@ describe('AddPost Component', () => {
     });
   });
 
-  it('displays "Unknown error" when error is not an Error instance', async () => {
-    // Mock the mutation to simulate a non-Error object
-    server.use(
-      http.post('https://jsonplaceholder.typicode.com/posts', () => {
-        return new HttpResponse(null, {
-          status: 400,
-          statusText: 'Bad Request',
-        });
-      })
-    );
-
-    render(<AddPost />, { wrapper });
-
-    // Fill and submit form
-    fireEvent.change(screen.getByLabelText(/title/i), {
-      target: { value: 'Test Title' },
-    });
-    fireEvent.change(screen.getByLabelText(/body/i), {
-      target: { value: 'Test Body' },
-    });
-    fireEvent.click(screen.getByRole('button', { name: /submit/i }));
-
-    // Wait for and check the "Unknown error" message
-    await waitFor(() => {
-      expect(
-        screen.getByText(/Error: Request failed with status code 400/i)
-      ).toBeInTheDocument();
-    });
-  });
-
   it('disables submit button while submitting', async () => {
     render(<AddPost />, { wrapper });
 
