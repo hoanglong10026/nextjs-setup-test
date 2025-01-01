@@ -7,4 +7,14 @@ export const handlers = [
       { id: 2, title: 'Post 2', body: 'Body of Post 2' },
     ]);
   }),
+  http.post(
+    'https://jsonplaceholder.typicode.com/posts',
+    async ({ request }) => {
+      const body = (await request.json()) as Record<string, unknown>;
+      return HttpResponse.json({
+        data: { id: 1, ...body },
+        message: 'success',
+      });
+    }
+  ),
 ];

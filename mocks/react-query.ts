@@ -6,6 +6,9 @@ const queryClient = new QueryClient({
       // Disable retries
       retry: false,
     },
+    mutations: {
+      retry: false,
+    },
   },
 });
 

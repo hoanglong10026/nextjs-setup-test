@@ -11,10 +11,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 
 describe('Posts Component', () => {
   // Set up and start the mock server before all tests, and stop it after all tests
-  beforeAll(() => server.listen());
-  afterAll(() => server.close());
   afterEach(() => {
-    server.resetHandlers();
     queryClient.clear();
   });
 
