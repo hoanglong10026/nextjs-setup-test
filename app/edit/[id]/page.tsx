@@ -1,4 +1,4 @@
-import EditPost from '@/components/EditPost/EditPost';
+import EditPost from '@/components/Post/EditPost/EditPost';
 
 export default async function EditPostPge({
   params,
