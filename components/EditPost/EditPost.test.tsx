@@ -1,5 +1,5 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/navigation';
 import EditPost from './EditPost';
 
@@ -38,6 +38,9 @@ describe('EditPost', () => {
   });
 
   it('handles form submission successfully', async () => {
+
+    const user = userEvent.setup();
+
     render(<EditPost id="1" />, { wrapper });
 
     // Wait for the form to load with initial data
@@ -49,12 +52,19 @@ describe('EditPost', () => {
     const titleInput = screen.getByLabelText('Title:');
     const bodyInput = screen.getByLabelText('Body:');
 
-    fireEvent.change(titleInput, { target: { value: 'Updated Title' } });
-    fireEvent.change(bodyInput, { target: { value: 'Updated Body' } });
+    await user.clear(titleInput);
+    await user.type(titleInput, 'Updated Title');
+    
+    await user.clear(bodyInput);
+    await user.type(bodyInput, 'Updated Body');
 
     // Submit form
     const submitButton = screen.getByRole('submit-button');
-    fireEvent.click(submitButton);
+    await user.click(submitButton);
+    
+    // Verify loading state
+    expect(submitButton).toBeDisabled();
+    expect(submitButton).toHaveTextContent('Updating...');
 
     // Verify navigation occurred
     await waitFor(() => {
@@ -77,6 +87,9 @@ describe('EditPost', () => {
   });
 
   it('handles update error', async () => {
+
+    const user = userEvent.setup();
+
     server.use(
       http.put('https://jsonplaceholder.typicode.com/posts/:id', () => {
         return HttpResponse.json(null, { status: 500 });
@@ -92,7 +105,7 @@ describe('EditPost', () => {
 
     // Submit form
     const submitButton = screen.getByText('Update Post');
-    fireEvent.click(submitButton);
+    user.click(submitButton);
 
     // Verify error message
     await waitFor(() => {
@@ -101,6 +114,9 @@ describe('EditPost', () => {
   });
 
   it('navigates back on cancel', async () => {
+
+    const user = userEvent.setup();
+
     render(<EditPost id="1" />, { wrapper });
 
     // Wait for the form to load
@@ -110,7 +126,7 @@ describe('EditPost', () => {
 
     // Click cancel button
     const cancelButton = screen.getByText('Cancel');
-    fireEvent.click(cancelButton);
+    await user.click(cancelButton);
 
     expect(mockPush).toHaveBeenCalledWith('/');
   });

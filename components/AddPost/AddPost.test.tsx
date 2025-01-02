@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import AddPost from './AddPost';
 import { wrapper } from '@/mocks/react-query';
@@ -14,18 +15,23 @@ describe('AddPost Component', () => {
   });
 
   it('successfully submits the form', async () => {
+
+    const user = userEvent.setup();
+
     render(<AddPost />, { wrapper });
 
     // Fill in the form
-    fireEvent.change(screen.getByLabelText(/title/i), {
-      target: { value: 'Test Title' },
-    });
-    fireEvent.change(screen.getByLabelText(/body/i), {
-      target: { value: 'Test Body' },
-    });
+    const titleInput = screen.getByLabelText('Title:');
+    const bodyInput = screen.getByLabelText('Body:');
+
+    await user.clear(titleInput);
+    await user.type(titleInput, 'Test Title');
+    
+    await user.clear(bodyInput);
+    await user.type(bodyInput, 'Test Body');
 
     // Submit the form
-    fireEvent.click(screen.getByRole('button', { name: /submit/i }));
+    await user.click(screen.getByRole('button', { name: /submit/i }));
 
     // Check if loading state is shown
     expect(screen.getByText(/submitting/i)).toBeInTheDocument();
@@ -43,6 +49,9 @@ describe('AddPost Component', () => {
   });
 
   it('displays specific error message when Error instance is received', async () => {
+
+    const user = userEvent.setup();
+
     // Override the default handler to return a specific error
     server.use(
       http.post('https://jsonplaceholder.typicode.com/posts', () => {
@@ -56,13 +65,16 @@ describe('AddPost Component', () => {
     render(<AddPost />, { wrapper });
 
     // Fill and submit form
-    fireEvent.change(screen.getByLabelText(/title/i), {
-      target: { value: 'Test Title' },
-    });
-    fireEvent.change(screen.getByLabelText(/body/i), {
-      target: { value: 'Test Body' },
-    });
-    fireEvent.click(screen.getByRole('button', { name: /submit/i }));
+    const titleInput = screen.getByLabelText('Title:');
+    const bodyInput = screen.getByLabelText('Body:');
+
+    await user.clear(titleInput);
+    await user.type(titleInput, 'Test Title');
+    
+    await user.clear(bodyInput);
+    await user.type(bodyInput, 'Test Body');
+
+    await user.click(screen.getByRole('button', { name: /submit/i }));
 
     // Wait for and check the specific error message
     await waitFor(() => {
@@ -73,20 +85,24 @@ describe('AddPost Component', () => {
   });
 
   it('disables submit button while submitting', async () => {
+
+    const user = userEvent.setup();
+
     render(<AddPost />, { wrapper });
 
     // Fill in the form
-    fireEvent.change(screen.getByLabelText(/title/i), {
-      target: { value: 'Test Title' },
-    });
-    fireEvent.change(screen.getByLabelText(/body/i), {
-      target: { value: 'Test Body' },
-    });
+    const titleInput = screen.getByLabelText('Title:');
+    const bodyInput = screen.getByLabelText('Body:');
 
+    await user.clear(titleInput);
+    await user.type(titleInput, 'Test Title');
+    
+    await user.clear(bodyInput);
+    await user.type(bodyInput, 'Test Body');
     const submitButton = screen.getByRole('button', { name: /submit/i });
 
     // Submit the form
-    fireEvent.click(submitButton);
+    await user.click(submitButton);
 
     // Check if button is disabled during submission
     expect(submitButton).toBeDisabled();
