@@ -1,4 +1,4 @@
-import AddPost from '@/components/AddPost';
+import AddPost from '@/components/AddPost/AddPost';
 
 export default function Home() {
   return (

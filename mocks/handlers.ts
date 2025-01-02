@@ -17,4 +17,21 @@ export const handlers = [
       });
     }
   ),
+  http.get('https://jsonplaceholder.typicode.com/posts/:id', () => {
+    return HttpResponse.json({
+      id: 1,
+      title: 'Test Post',
+      body: 'Test Body',
+    });
+  }),
+  http.put(
+    'https://jsonplaceholder.typicode.com/posts/:id',
+    async ({ request }) => {
+      const body = (await request.json()) as Record<string, unknown>;
+      return HttpResponse.json({
+        data: { id: 1, ...body },
+        message: 'success',
+      });
+    }
+  ),
 ];

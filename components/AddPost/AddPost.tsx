@@ -1,22 +1,7 @@
+'use client';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
-
-interface NewPost {
-  title: string;
-  body: string;
-}
-
-const createPost = async (newPost: NewPost) => {
-  const data = await axios.post('https://jsonplaceholder.typicode.com/posts', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(newPost),
-  });
-
-  return data;
-};
+import { createPost } from '@/app/actions/postAction';
 
 const AddPost = () => {
   const [title, setTitle] = useState('');
