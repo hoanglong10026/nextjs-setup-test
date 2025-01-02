@@ -32,36 +32,35 @@ describe('EditPost', () => {
     render(<EditPost id="1" />, { wrapper });
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Title:')).toHaveValue('Test Post');
-      expect(screen.getByLabelText('Body:')).toHaveValue('Test Body');
+      expect(screen.getByLabelText('Title')).toHaveValue('Test Post');
+      expect(screen.getByLabelText('Body')).toHaveValue('Test Body');
     });
   });
 
   it('handles form submission successfully', async () => {
-
     const user = userEvent.setup();
 
     render(<EditPost id="1" />, { wrapper });
 
     // Wait for the form to load with initial data
     await waitFor(() => {
-      expect(screen.getByLabelText('Title:')).toBeInTheDocument();
+      expect(screen.getByLabelText('Title')).toBeInTheDocument();
     });
 
     // Update form fields
-    const titleInput = screen.getByLabelText('Title:');
-    const bodyInput = screen.getByLabelText('Body:');
+    const titleInput = screen.getByLabelText('Title');
+    const bodyInput = screen.getByLabelText('Body');
 
     await user.clear(titleInput);
     await user.type(titleInput, 'Updated Title');
-    
+
     await user.clear(bodyInput);
     await user.type(bodyInput, 'Updated Body');
 
     // Submit form
     const submitButton = screen.getByRole('submit-button');
     await user.click(submitButton);
-    
+
     // Verify loading state
     expect(submitButton).toBeDisabled();
     expect(submitButton).toHaveTextContent('Updating...');
@@ -87,7 +86,6 @@ describe('EditPost', () => {
   });
 
   it('handles update error', async () => {
-
     const user = userEvent.setup();
 
     server.use(
@@ -100,7 +98,7 @@ describe('EditPost', () => {
 
     // Wait for the form to load
     await waitFor(() => {
-      expect(screen.getByLabelText('Title:')).toBeInTheDocument();
+      expect(screen.getByLabelText('Title')).toBeInTheDocument();
     });
 
     // Submit form
@@ -114,14 +112,13 @@ describe('EditPost', () => {
   });
 
   it('navigates back on cancel', async () => {
-
     const user = userEvent.setup();
 
     render(<EditPost id="1" />, { wrapper });
 
     // Wait for the form to load
     await waitFor(() => {
-      expect(screen.getByLabelText('Title:')).toBeInTheDocument();
+      expect(screen.getByLabelText('Title')).toBeInTheDocument();
     });
 
     // Click cancel button

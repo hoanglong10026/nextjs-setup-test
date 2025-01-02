@@ -15,7 +15,6 @@ describe('AddPost Component', () => {
   });
 
   it('successfully submits the form', async () => {
-
     const user = userEvent.setup();
 
     render(<AddPost />, { wrapper });
@@ -26,7 +25,7 @@ describe('AddPost Component', () => {
 
     await user.clear(titleInput);
     await user.type(titleInput, 'Test Title');
-    
+
     await user.clear(bodyInput);
     await user.type(bodyInput, 'Test Body');
 
@@ -49,7 +48,6 @@ describe('AddPost Component', () => {
   });
 
   it('displays specific error message when Error instance is received', async () => {
-
     const user = userEvent.setup();
 
     // Override the default handler to return a specific error
@@ -70,7 +68,7 @@ describe('AddPost Component', () => {
 
     await user.clear(titleInput);
     await user.type(titleInput, 'Test Title');
-    
+
     await user.clear(bodyInput);
     await user.type(bodyInput, 'Test Body');
 
@@ -85,7 +83,6 @@ describe('AddPost Component', () => {
   });
 
   it('disables submit button while submitting', async () => {
-
     const user = userEvent.setup();
 
     render(<AddPost />, { wrapper });
@@ -96,7 +93,7 @@ describe('AddPost Component', () => {
 
     await user.clear(titleInput);
     await user.type(titleInput, 'Test Title');
-    
+
     await user.clear(bodyInput);
     await user.type(bodyInput, 'Test Body');
     const submitButton = screen.getByRole('button', { name: /submit/i });

@@ -4,11 +4,14 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { fetchPost, updatePost } from '@/app/actions/postAction';
+import { useTranslations } from 'next-intl';
 
 const EditPost = ({ id }: { id: string }) => {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+
+  const t = useTranslations('Post');
 
   // Fetch existing post data
   const {
@@ -52,14 +55,14 @@ const EditPost = ({ id }: { id: string }) => {
 
   return (
     <div className="max-w-2xl mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Edit Post</h2>
+      <h2 className="text-2xl font-bold mb-4">{t('Edit Post')}</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label
             htmlFor="title"
             className="block text-sm font-medium text-gray-700"
           >
-            Title:
+            {t('Title')}
           </label>
           <input
             id="title"
@@ -75,7 +78,7 @@ const EditPost = ({ id }: { id: string }) => {
             htmlFor="body"
             className="block text-sm font-medium text-gray-700"
           >
-            Body:
+            {t('Body')}
           </label>
           <textarea
             id="body"
@@ -101,7 +104,7 @@ const EditPost = ({ id }: { id: string }) => {
             disabled={isUpdating}
             className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
           >
-            Cancel
+            {t('Cancel')}
           </button>
         </div>
         {isUpdateError && (
