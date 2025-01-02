@@ -1,18 +1,7 @@
 'use client';
+import { fetchPosts } from '@/app/actions/postAction';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-interface Post {
-  id: number;
-  title: string;
-  body: string;
-}
-
-const fetchPosts = async (): Promise<Post[]> => {
-  const { data } = await axios.get(
-    'https://jsonplaceholder.typicode.com/posts'
-  );
-  return data;
-};
+import { Post } from '@/components/lib/Post';
 
 const Posts = () => {
   const { data, error, isLoading } = useQuery<Post[], Error>({
@@ -31,6 +20,8 @@ const Posts = () => {
           <li key={post.id}>
             <h3>{post.title}</h3>
             <p>{post.body}</p>
+
+            <hr />
           </li>
         ))}
       </ul>

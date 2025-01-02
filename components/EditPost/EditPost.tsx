@@ -44,9 +44,6 @@ const EditPost = ({ id }: { id: string }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log('handle submit');
-
     mutate({ id, post: { id: parseInt(id), title, body } });
   };
 

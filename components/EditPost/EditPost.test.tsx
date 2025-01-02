@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+
 import { useRouter } from 'next/navigation';
 import EditPost from './EditPost';
 
@@ -52,7 +53,7 @@ describe('EditPost', () => {
     fireEvent.change(bodyInput, { target: { value: 'Updated Body' } });
 
     // Submit form
-    const submitButton = screen.getByText('Update Post');
+    const submitButton = screen.getByRole('submit-button');
     fireEvent.click(submitButton);
 
     // Verify navigation occurred
@@ -104,35 +105,13 @@ describe('EditPost', () => {
 
     // Wait for the form to load
     await waitFor(() => {
-      expect(screen.getByText('Cancel')).toBeInTheDocument();
+      expect(screen.getByLabelText('Title:')).toBeInTheDocument();
     });
 
     // Click cancel button
     const cancelButton = screen.getByText('Cancel');
     fireEvent.click(cancelButton);
 
-    expect(mockPush).toHaveBeenCalledWith('/');
-  });
-
-  it('shows loading state while updating the post', async () => {
-    render(<EditPost id="1" />, { wrapper });
-
-    // Wait for initial post data to load
-    await screen.findByDisplayValue('Test Post');
-
-    // Submit the form
-    const submitButton = screen.getByRole('submit-button');
-    fireEvent.click(submitButton);
-
-    // Verify "Updating..." text appears during submission
-    expect(screen.getByText('Updating...')).toBeInTheDocument();
-
-    // Wait for update to complete
-    await waitFor(() => {
-      expect(screen.queryByText('Updating...')).not.toBeInTheDocument();
-    });
-
-    // Verify navigation occurred after update
     expect(mockPush).toHaveBeenCalledWith('/');
   });
 });

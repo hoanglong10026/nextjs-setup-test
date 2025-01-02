@@ -1,6 +1,13 @@
 import { Post } from '@/components/lib/Post';
 import axios from 'axios';
 
+export const fetchPosts = async (): Promise<Post[]> => {
+  const { data } = await axios.get(
+    'https://jsonplaceholder.typicode.com/posts'
+  );
+  return data;
+};
+
 export const fetchPost = async (id: string): Promise<Post> => {
   const { data } = await axios.get(
     `https://jsonplaceholder.typicode.com/posts/${id}`
@@ -9,13 +16,10 @@ export const fetchPost = async (id: string): Promise<Post> => {
 };
 
 export const createPost = async (newPost: Post) => {
-  const data = await axios.post('https://jsonplaceholder.typicode.com/posts', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(newPost),
-  });
-
+  const { data } = await axios.post(
+    'https://jsonplaceholder.typicode.com/posts',
+    newPost
+  );
   return data;
 };
 
