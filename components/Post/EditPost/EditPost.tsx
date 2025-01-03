@@ -13,7 +13,6 @@ const EditPost = ({ id }: { id: string }) => {
 
   const t = useTranslations('Post')
 
-  // Fetch existing post data
   const {
     data: post,
     isLoading: isLoadingPost,
@@ -24,7 +23,6 @@ const EditPost = ({ id }: { id: string }) => {
     enabled: !!id,
   })
 
-  // Update form fields when post data is loaded
   useEffect(() => {
     if (post) {
       setTitle(post.title)
@@ -32,7 +30,6 @@ const EditPost = ({ id }: { id: string }) => {
     }
   }, [post])
 
-  // Handle post update
   const {
     mutate,
     isPending: isUpdating,
@@ -50,14 +47,30 @@ const EditPost = ({ id }: { id: string }) => {
     mutate({ id, post: { id: parseInt(id), title, body } })
   }
 
-  if (isLoadingPost) return <div>Loading...</div>
-  if (fetchError) return <div>Error loading post</div>
+  if (isLoadingPost) {
+    return (
+      <div className="max-w-2xl mx-auto p-6 text-center text-gray-600">
+        Loading...
+      </div>
+    )
+  }
+
+  if (fetchError) {
+    return (
+      <div className="max-w-2xl mx-auto p-6 text-center text-red-600">
+        Error loading post
+      </div>
+    )
+  }
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">{t('Edit Post')}</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+        {t('Edit Post')}
+      </h2>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-2">
           <label
             htmlFor="title"
             className="block text-sm font-medium text-gray-700"
@@ -70,10 +83,12 @@ const EditPost = ({ id }: { id: string }) => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter post title"
           />
         </div>
-        <div>
+
+        <div className="space-y-2">
           <label
             htmlFor="body"
             className="block text-sm font-medium text-gray-700"
@@ -85,30 +100,40 @@ const EditPost = ({ id }: { id: string }) => {
             value={body}
             onChange={(e) => setBody(e.target.value)}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[150px]"
+            placeholder="Write your post content here"
             rows={5}
           />
         </div>
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            disabled={isUpdating}
-            role="submit-button"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-          >
-            {isUpdating ? 'Updating...' : 'Update Post'}
-          </button>
+
+        <div className="flex items-center justify-end space-x-4">
           <button
             type="button"
             onClick={() => router.push('/')}
             disabled={isUpdating}
-            className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
           >
             {t('Cancel')}
           </button>
+          <button
+            type="submit"
+            disabled={isUpdating}
+            role="submit-button"
+            className={`px-4 py-2 rounded-md text-white font-medium transition-colors
+              ${
+                isUpdating
+                  ? 'bg-blue-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+              }`}
+          >
+            {isUpdating ? t('Updating') : t('Update Post')}
+          </button>
         </div>
+
         {isUpdateError && (
-          <p className="text-red-600">Error: {updateError.message}</p>
+          <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-md">
+            Error: {updateError.message}
+          </div>
         )}
       </form>
     </div>

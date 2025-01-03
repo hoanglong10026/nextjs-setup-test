@@ -3,6 +3,8 @@
     "Edit Post": "Edit Post",
     "Title": "Title",
     "Body": "Body",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Updating": "Updating...",
+    "Update Post": "Update Post"
   }
 }
