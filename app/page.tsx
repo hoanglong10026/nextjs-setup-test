@@ -1,4 +1,4 @@
-import Posts from '@/components/Post/Posts/Posts';
+import Posts from '@/components/Post/Posts/Posts'
 
 export default function Home() {
   return (
@@ -6,5 +6,5 @@ export default function Home() {
       <h1>Welcome to My Next.js App with React Query</h1>
       <Posts />
     </div>
-  );
+  )
 }

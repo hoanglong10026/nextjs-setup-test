@@ -1,17 +1,17 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { fetchPost, updatePost } from '@/app/actions/postAction';
-import { useTranslations } from 'next-intl';
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { fetchPost, updatePost } from '@/app/actions/postAction'
+import { useTranslations } from 'next-intl'
 
 const EditPost = ({ id }: { id: string }) => {
-  const router = useRouter();
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+  const router = useRouter()
+  const [title, setTitle] = useState('')
+  const [body, setBody] = useState('')
 
-  const t = useTranslations('Post');
+  const t = useTranslations('Post')
 
   // Fetch existing post data
   const {
@@ -22,15 +22,15 @@ const EditPost = ({ id }: { id: string }) => {
     queryKey: ['post', id],
     queryFn: () => fetchPost(id),
     enabled: !!id,
-  });
+  })
 
   // Update form fields when post data is loaded
   useEffect(() => {
     if (post) {
-      setTitle(post.title);
-      setBody(post.body);
+      setTitle(post.title)
+      setBody(post.body)
     }
-  }, [post]);
+  }, [post])
 
   // Handle post update
   const {
@@ -41,17 +41,17 @@ const EditPost = ({ id }: { id: string }) => {
   } = useMutation({
     mutationFn: updatePost,
     onSuccess: () => {
-      router.push('/');
+      router.push('/')
     },
-  });
+  })
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    mutate({ id, post: { id: parseInt(id), title, body } });
-  };
+    e.preventDefault()
+    mutate({ id, post: { id: parseInt(id), title, body } })
+  }
 
-  if (isLoadingPost) return <div>Loading...</div>;
-  if (fetchError) return <div>Error loading post</div>;
+  if (isLoadingPost) return <div>Loading...</div>
+  if (fetchError) return <div>Error loading post</div>
 
   return (
     <div className="max-w-2xl mx-auto p-4">
@@ -112,7 +112,7 @@ const EditPost = ({ id }: { id: string }) => {
         )}
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default EditPost;
+export default EditPost

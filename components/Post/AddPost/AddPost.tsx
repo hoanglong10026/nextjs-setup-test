@@ -1,12 +1,12 @@
-'use client';
-import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createPost } from '@/app/actions/postAction';
+'use client'
+import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createPost } from '@/app/actions/postAction'
 
 const AddPost = () => {
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const queryClient = useQueryClient();
+  const [title, setTitle] = useState('')
+  const [body, setBody] = useState('')
+  const queryClient = useQueryClient()
 
   const {
     mutate,
@@ -18,24 +18,24 @@ const AddPost = () => {
     mutationFn: createPost,
     onSuccess: () => {
       // Invalidate and refetch posts after successful mutation
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
 
       // Clear form
-      setTitle('');
-      setBody('');
+      setTitle('')
+      setBody('')
     },
-  });
+  })
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     // Trigger the mutation to create a new post
-    mutate({ title, body });
+    mutate({ title, body })
 
     // Clear the form after submission
-    setTitle('');
-    setBody('');
-  };
+    setTitle('')
+    setBody('')
+  }
 
   return (
     <div>
@@ -70,7 +70,7 @@ const AddPost = () => {
         <p style={{ color: 'green' }}>Post created successfully!</p>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default AddPost;
+export default AddPost
