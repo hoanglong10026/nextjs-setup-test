@@ -12,7 +12,7 @@ describe('Posts Component', () => {
 
   it('shows loading state initially', () => {
     render(<Posts />, { wrapper })
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
+    expect(screen.getByRole('loading-state')).toBeInTheDocument()
   })
 
   it('should render posts when data is fetched', async () => {
@@ -40,8 +40,8 @@ describe('Posts Component', () => {
     )
 
     render(<Posts />, { wrapper })
-    await waitFor(() => screen.getByText(/An error occurred/))
+    await waitFor(() => screen.getByText(/Error loading posts/))
 
-    expect(screen.getByText(/An error occurred/)).toBeInTheDocument()
+    expect(screen.getByText(/Error loading posts/)).toBeInTheDocument()
   })
 })
