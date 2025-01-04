@@ -25,15 +25,15 @@ describe('EditPost', () => {
 
   it('renders loading state initially', () => {
     render(<EditPost id="1" />, { wrapper })
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
+    expect(screen.getByRole('progressbar')).toBeInTheDocument()
   })
 
   it('loads and displays post data', async () => {
     render(<EditPost id="1" />, { wrapper })
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Title')).toHaveValue('Test Post')
-      expect(screen.getByLabelText('Body')).toHaveValue('Test Body')
+      expect(screen.getByTestId('title')).toHaveValue('Test Post')
+      expect(screen.getByTestId('body')).toHaveValue('Test Body')
     })
   })
 
@@ -44,12 +44,12 @@ describe('EditPost', () => {
 
     // Wait for the form to load with initial data
     await waitFor(() => {
-      expect(screen.getByLabelText('Title')).toBeInTheDocument()
+      expect(screen.getByTestId('title')).toBeInTheDocument()
     })
 
     // Update form fields
-    const titleInput = screen.getByLabelText('Title')
-    const bodyInput = screen.getByLabelText('Body')
+    const titleInput = screen.getByTestId('title')
+    const bodyInput = screen.getByTestId('body')
 
     await user.clear(titleInput)
     await user.type(titleInput, 'Updated Title')
@@ -81,7 +81,7 @@ describe('EditPost', () => {
     render(<EditPost id="1" />, { wrapper })
 
     await waitFor(() => {
-      expect(screen.getByText('Error loading post')).toBeInTheDocument()
+      expect(screen.getByRole('alert')).toBeInTheDocument()
     })
   })
 
@@ -98,7 +98,7 @@ describe('EditPost', () => {
 
     // Wait for the form to load
     await waitFor(() => {
-      expect(screen.getByLabelText('Title')).toBeInTheDocument()
+      expect(screen.getByTestId('title')).toBeInTheDocument()
     })
 
     // Submit form
@@ -107,7 +107,7 @@ describe('EditPost', () => {
 
     // Verify error message
     await waitFor(() => {
-      expect(screen.getByText(/Error:/)).toBeInTheDocument()
+      expect(screen.getByRole('alert')).toBeInTheDocument()
     })
   })
 
@@ -118,7 +118,7 @@ describe('EditPost', () => {
 
     // Wait for the form to load
     await waitFor(() => {
-      expect(screen.getByLabelText('Title')).toBeInTheDocument()
+      expect(screen.getByTestId('title')).toBeInTheDocument()
     })
 
     // Click cancel button

@@ -1,16 +1,24 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { fetchPost, updatePost } from '@/app/actions/postAction'
 import { useTranslations } from 'next-intl'
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  Alert,
+  Stack,
+  CircularProgress,
+} from '@mui/material'
 
 const EditPost = ({ id }: { id: string }) => {
   const router = useRouter()
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
-
   const t = useTranslations('Post')
 
   const {
@@ -49,94 +57,93 @@ const EditPost = ({ id }: { id: string }) => {
 
   if (isLoadingPost) {
     return (
-      <div className="max-w-2xl mx-auto p-6 text-center text-gray-600">
-        Loading...
-      </div>
+      <Box display="flex" justifyContent="center" p={6}>
+        <CircularProgress />
+      </Box>
     )
   }
 
   if (fetchError) {
     return (
-      <div className="max-w-2xl mx-auto p-6 text-center text-red-600">
-        Error loading post
-      </div>
+      <Box maxWidth="md" sx={{ mx: 'auto', p: 3 }}>
+        <Alert severity="error">{t('Error loading post')}</Alert>
+      </Box>
     )
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">
-        {t('Edit Post')}
-      </h2>
+    <Box maxWidth="md" sx={{ mx: 'auto', p: 3 }}>
+      <Paper elevation={3} sx={{ p: 4 }}>
+        <Typography variant="h5" component="h2" gutterBottom>
+          {t('Edit Post')}
+        </Typography>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-700"
-          >
-            {t('Title')}
-          </label>
-          <input
-            id="title"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter post title"
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={3}>
+            <TextField
+              label={t('Title')}
+              name="title"
+              slotProps={{
+                htmlInput: {
+                  'data-testid': 'title',
+                },
+              }}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              fullWidth
+              variant="outlined"
+              disabled={isUpdating}
+            />
 
-        <div className="space-y-2">
-          <label
-            htmlFor="body"
-            className="block text-sm font-medium text-gray-700"
-          >
-            {t('Body')}
-          </label>
-          <textarea
-            id="body"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[150px]"
-            placeholder="Write your post content here"
-            rows={5}
-          />
-        </div>
+            <TextField
+              label={t('Body')}
+              name="body"
+              slotProps={{
+                htmlInput: {
+                  'data-testid': 'body',
+                },
+              }}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              required
+              fullWidth
+              multiline
+              rows={4}
+              variant="outlined"
+              disabled={isUpdating}
+            />
 
-        <div className="flex items-center justify-end space-x-4">
-          <button
-            type="button"
-            onClick={() => router.push('/')}
-            disabled={isUpdating}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-          >
-            {t('Cancel')}
-          </button>
-          <button
-            type="submit"
-            disabled={isUpdating}
-            role="submit-button"
-            className={`px-4 py-2 rounded-md text-white font-medium transition-colors
-              ${
-                isUpdating
-                  ? 'bg-blue-400 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-              }`}
-          >
-            {isUpdating ? t('Updating') : t('Update Post')}
-          </button>
-        </div>
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+              <Button
+                type="button"
+                onClick={() => router.push('/')}
+                disabled={isUpdating}
+                variant="outlined"
+                color="inherit"
+              >
+                {t('Cancel')}
+              </Button>
+              <Button
+                type="submit"
+                disabled={isUpdating}
+                variant="contained"
+                color="primary"
+                role="submit-button"
+              >
+                {isUpdating ? t('Updating') : t('Update Post')}
+              </Button>
+            </Box>
+          </Stack>
 
-        {isUpdateError && (
-          <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-md">
-            Error: {updateError.message}
-          </div>
-        )}
-      </form>
-    </div>
+          {isUpdateError && (
+            <Alert severity="error" sx={{ mt: 3 }}>
+              {updateError?.message || t('Error updating post')}
+            </Alert>
+          )}
+        </form>
+      </Paper>
+    </Box>
   )
 }
 

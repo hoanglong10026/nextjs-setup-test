@@ -1,18 +1,15 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/lib/Providers'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-})
+import { Roboto } from 'next/font/google'
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const roboto = Roboto({
+  weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -31,9 +28,7 @@ export default async function RootLayout({
   return (
     <Providers>
       <html lang={locale}>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+        <body className={`${roboto.className} antialiased`}>
           <NextIntlClientProvider messages={messages}>
             {children}
           </NextIntlClientProvider>

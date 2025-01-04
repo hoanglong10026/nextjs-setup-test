@@ -5,6 +5,7 @@
     "Body": "Body",
     "Cancel": "Cancel",
     "Updating": "Updating...",
-    "Update Post": "Update Post"
+    "Update Post": "Update Post",
+    "Error loading post": "Error loading post"
   }
 }

@@ -20,8 +20,8 @@ describe('AddPost Component', () => {
     render(<AddPost />, { wrapper })
 
     // Fill in the form
-    const titleInput = screen.getByLabelText('Title:')
-    const bodyInput = screen.getByLabelText('Body:')
+    const titleInput = screen.getByLabelText(/title/i)
+    const bodyInput = screen.getByLabelText(/body/i)
 
     await user.clear(titleInput)
     await user.type(titleInput, 'Test Title')
@@ -61,8 +61,8 @@ describe('AddPost Component', () => {
     render(<AddPost />, { wrapper })
 
     // Fill and submit form
-    const titleInput = screen.getByLabelText('Title:')
-    const bodyInput = screen.getByLabelText('Body:')
+    const titleInput = screen.getByLabelText(/title/i)
+    const bodyInput = screen.getByLabelText(/body/i)
 
     await user.clear(titleInput)
     await user.type(titleInput, 'Test Title')
@@ -86,13 +86,10 @@ describe('AddPost Component', () => {
     render(<AddPost />, { wrapper })
 
     // Fill in the form
-    const titleInput = screen.getByLabelText('Title:')
-    const bodyInput = screen.getByLabelText('Body:')
+    const titleInput = screen.getByTestId(/title/i)
+    const bodyInput = screen.getByTestId(/body/i)
 
-    await user.clear(titleInput)
     await user.type(titleInput, 'Test Title')
-
-    await user.clear(bodyInput)
     await user.type(bodyInput, 'Test Body')
     const submitButton = screen.getByRole('button', { name: /submit/i })
 
